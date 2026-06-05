@@ -1,0 +1,200 @@
+menu "Camera Demo Configuration"
+
+    choice APP_CAMERA_INTERFACE
+        prompt "Camera Interface"
+        default APP_CAMERA_INTERFACE_MIPI_CSI if ESP_VIDEO_ENABLE_MIPI_CSI_VIDEO_DEVICE
+        default APP_CAMERA_INTERFACE_DVP if ESP_VIDEO_ENABLE_DVP_VIDEO_DEVICE
+
+        config APP_CAMERA_INTERFACE_MIPI_CSI
+            bool "MIPI CSI"
+            depends on ESP_VIDEO_ENABLE_MIPI_CSI_VIDEO_DEVICE
+
+        config APP_CAMERA_INTERFACE_DVP
+            bool "DVP"
+            depends on ESP_VIDEO_ENABLE_DVP_VIDEO_DEVICE
+    endchoice
+
+    if APP_CAMERA_INTERFACE_MIPI_CSI
+        config APP_CAMERA_SENSOR_SELECTION_SC2336
+            bool
+            default y
+            select CAMERA_SC2336
+            select CAMERA_SC2336_AUTO_DETECT
+            select CAMERA_SC2336_AUTO_DETECT_MIPI_INTERFACE_SENSOR
+    endif
+
+    config APP_CAMERA_FRAME_WIDTH
+        int "Preview frame width"
+        range 64 1920
+        default 480
+
+    config APP_CAMERA_FRAME_HEIGHT
+        int "Preview frame height"
+        range 64 1080
+        default 480
+
+    config APP_CAMERA_BUFFER_COUNT
+        int "Camera stream buffer count"
+        range 2 4
+        default 2
+
+    choice APP_CAMERA_PIXEL_FORMAT
+        prompt "Camera preview pixel format"
+        default APP_CAMERA_PIXEL_FORMAT_RGB565
+
+        config APP_CAMERA_PIXEL_FORMAT_RGB565
+            bool "RGB565"
+
+        config APP_CAMERA_PIXEL_FORMAT_RGB888
+            bool "RGB888"
+    endchoice
+
+    config APP_CAMERA_RGB565_BYTE_SWAP
+        bool "Swap RGB565 byte order for preview"
+        default n
+        help
+            Enable this if the preview updates but looks gray, washed out, or otherwise
+            incorrect with sensors that output RGB565 in the opposite byte order.
+
+    config APP_CAMERA_RGB565_RB_SWAP
+        bool "Swap RGB565 red/blue channels for preview"
+        default n
+        help
+            Enable this if the preview updates but colors look badly shifted, blown out,
+            or obviously incorrect after selecting RGB565 output.
+
+    config APP_CAMERA_ENABLE_TEST_PATTERN
+        bool "Enable camera sensor test pattern"
+        default n
+        help
+            Enable the sensor's internal test pattern. This is useful to distinguish
+            sensor/ISP image problems from LCD preview pipeline problems.
+
+    config APP_CAMERA_ENABLE_VFLIP
+        bool "Enable vertical flip"
+        default y
+
+    config APP_CAMERA_ENABLE_HFLIP
+        bool "Enable horizontal flip"
+        default y
+
+    config APP_CAMERA_TASK_STACK_SIZE
+        int "Camera preview task stack size"
+        range 4096 16384
+        default 8192
+
+    config APP_CAMERA_TASK_PRIORITY
+        int "Camera preview task priority"
+        range 1 10
+        default 5
+
+    menu "Camera SCCB"
+        config APP_CAMERA_SCCB_I2C_PORT
+            int "SCCB I2C port"
+            range 0 5
+            default 0
+
+        config APP_CAMERA_SCCB_I2C_FREQ
+            int "SCCB I2C frequency (Hz)"
+            range 10000 400000
+            default 100000
+    endmenu
+
+    if APP_CAMERA_INTERFACE_MIPI_CSI
+        menu "MIPI CSI Camera Pins"
+            config APP_CAMERA_MIPI_SCCB_SCL_PIN
+                int "SCCB SCL GPIO"
+                default 8
+
+            config APP_CAMERA_MIPI_SCCB_SDA_PIN
+                int "SCCB SDA GPIO"
+                default 7
+
+            config APP_CAMERA_SC2336_MIPI_RESET_PIN
+                int "SC2336 reset GPIO"
+                default 26
+
+            config APP_CAMERA_SC2336_MIPI_PWDN_PIN
+                int "SC2336 power-down GPIO"
+                default -1
+
+            config APP_CAMERA_MIPI_DONT_INIT_LDO
+                bool "Do not initialize MIPI LDO in esp_video"
+                default n
+        endmenu
+    endif
+
+    if APP_CAMERA_INTERFACE_DVP
+        menu "DVP Camera Pins"
+            config APP_CAMERA_DVP_SCCB_SCL_PIN
+                int "SCCB SCL GPIO"
+                default 8
+
+            config APP_CAMERA_DVP_SCCB_SDA_PIN
+                int "SCCB SDA GPIO"
+                default 7
+
+            config APP_CAMERA_DVP_RESET_PIN
+                int "Sensor reset GPIO"
+                default 36
+
+            config APP_CAMERA_DVP_PWDN_PIN
+                int "Sensor power-down GPIO"
+                default 38
+
+            config APP_CAMERA_DVP_XCLK_FREQ
+                int "XCLK frequency (Hz)"
+                range 1000000 40000000
+                default 24000000
+
+            config APP_CAMERA_DVP_XCLK_PIN
+                int "XCLK GPIO"
+                default 20
+
+            config APP_CAMERA_DVP_PCLK_PIN
+                int "PCLK GPIO"
+                default 4
+
+            config APP_CAMERA_DVP_VSYNC_PIN
+                int "VSYNC GPIO"
+                default 37
+
+            config APP_CAMERA_DVP_DE_PIN
+                int "DE/HREF GPIO"
+                default 22
+
+            config APP_CAMERA_DVP_D0_PIN
+                int "D0 GPIO"
+                default 2
+
+            config APP_CAMERA_DVP_D1_PIN
+                int "D1 GPIO"
+                default 32
+
+            config APP_CAMERA_DVP_D2_PIN
+                int "D2 GPIO"
+                default 33
+
+            config APP_CAMERA_DVP_D3_PIN
+                int "D3 GPIO"
+                default 23
+
+            config APP_CAMERA_DVP_D4_PIN
+                int "D4 GPIO"
+                default 3
+
+            config APP_CAMERA_DVP_D5_PIN
+                int "D5 GPIO"
+                default 6
+
+            config APP_CAMERA_DVP_D6_PIN
+                int "D6 GPIO"
+                default 5
+
+            config APP_CAMERA_DVP_D7_PIN
+                int "D7 GPIO"
+                default 21
+        endmenu
+    endif
+
+endmenu

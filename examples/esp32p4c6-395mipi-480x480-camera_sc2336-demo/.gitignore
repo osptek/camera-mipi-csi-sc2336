@@ -1,0 +1,6 @@
+# Workspace-level generated files
+/build/
+/managed_components/
+/external/
+.vscode/
+/.cache/
