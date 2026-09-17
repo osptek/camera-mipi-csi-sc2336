@@ -1,0 +1,12 @@
+id: camera-mipi-csi-sc2336
+category: cameras
+
+title: SC2336
+summary: MIPI CSI camera module supporting 720p, 1080p, and 800x800 capture.
+interface: [mipi, csi]
+
+specs:
+  sensor: SC2336
+  interface: MIPI CSI
+  configuration: SCCB/I2C
+  output_modes: 1280x720, 1920x1080, 800x800
