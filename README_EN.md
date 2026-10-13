@@ -25,7 +25,7 @@
 | Path | Contents |
 |:--|:--|
 | `assets/` | Demo images / videos (when available) |
-| `docs/` | Sensor datasheets and module notes (**to be added**) |
+| `docs/` | Adapter board schematic |
 | `examples/` | **Sample projects** |
 
 ### `examples/` layout
@@ -39,3 +39,11 @@
 | Description | Path |
 |:--|:--|
 | SC2336 MIPI CSI preview demo | `examples/esp32p4c6-395mipi-480x480-camera_sc2336-demo/` |
+
+---
+
+## Resources
+
+| Resource | Link |
+| ---- | ---- |
+| Shared OV2710 / SC2336 camera adapter schematic (V1.1) | [`docs/SCH_OV2710&SC2336摄像头转接板V1.1_2026-10-13.pdf`](./docs/SCH_OV2710%26SC2336%E6%91%84%E5%83%8F%E5%A4%B4%E8%BD%AC%E6%8E%A5%E6%9D%BFV1.1_2026-10-13.pdf) |
